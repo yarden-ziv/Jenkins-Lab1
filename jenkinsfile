@@ -7,5 +7,16 @@ pipeline{
                 echo "cloning finished"
             }
         }
+        stage('build'){
+            steps{
+                sh "docker build -t movies-api ."
+                sh "docker images"
+            }
+        }
+    }
+    post{
+        always{
+            cleanWs()
+        }
     }
 }
