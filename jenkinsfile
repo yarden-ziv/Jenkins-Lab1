@@ -9,8 +9,10 @@ pipeline{
         }
         stage('build'){
             steps{
-                sh "docker build -t movies-api ."
-                sh "docker images"
+                dir(movies){
+                    sh "docker build -t movies-api ."
+                    sh "docker images"
+                }
             }
         }
     }
