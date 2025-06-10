@@ -1,0 +1,11 @@
+pipeline{
+    agent any
+    stages{
+        stage('clone movies repo'{
+            steps{
+                sh "git clone https://github.com/devopsPRO27/movies-api"
+                echo "cloning finished"
+            }
+        }
+    }
+}
