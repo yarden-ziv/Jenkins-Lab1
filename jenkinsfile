@@ -1,51 +1,54 @@
-pipeline{
+pipeline {
     agent any
     environment {
         IMAGE_NAME = "yarden-movies-api"
     }
-    stages{
-        stage('clone movies repo'){
-            steps{
+    stages {
+        stage('clone movies repo') {
+            steps {
                 sh "git clone https://github.com/devopsPRO27/movies-api"
                 echo "cloning finished"
             }
         }
-        stage('build'){
-            steps{
+
+        stage('build') {
+            steps {
                 echo "******building the app******"
                 sh "docker build -f movies/Dockerfile -t ${env.IMAGE_NAME}:${env.BUILD_NUMBER} ."
                 sh "docker images"
             }
         }
-        stage('test'){
-            steps{
+
+        stage('test') {
+            steps {
                 echo "******testing the app******"
                 sh "docker run -d -p 8085:80 --name test-container ${env.IMAGE_NAME}:${env.BUILD_NUMBER}"
                 sh "sleep 5"
                 sh "python3 movies/Test/test.py"
             }
-        post{
-            always{
-                sh "docker rm -f test-container"
+            post {
+                always {
+                    sh "docker rm -f test-container"
+                }
             }
         }
-        }
-    }
-        stage('deploy'){
-            steps{
+
+        stage('deploy') {
+            steps {
                 echo "******deploying a new version******"
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                sh''' 
-                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                    docker tag movies-api $DOCKER_USER/movies_api:latest
-                    docker push $DOCKER_USER/movies_api:latest
-                '''
-            
+                    sh """
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker tag ${env.IMAGE_NAME}:${env.BUILD_NUMBER} $DOCKER_USER/movies_api:latest
+                        docker push $DOCKER_USER/movies_api:latest
+                    """
+                }
             }
         }
     }
-    post{
-        always{
+
+    post {
+        always {
             cleanWs()
             sh "docker rmi -f ${env.IMAGE_NAME}:${env.BUILD_NUMBER}"
         }
