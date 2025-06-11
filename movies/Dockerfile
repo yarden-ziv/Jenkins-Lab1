@@ -8,4 +8,4 @@ RUN pip install -r requirments.txt
 
 COPY movies-api/movies.py .
 
-EXPOSE 3030
+EXPOSE 80

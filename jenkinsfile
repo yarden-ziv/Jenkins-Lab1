@@ -1,5 +1,8 @@
 pipeline{
     agent any
+    environment {
+        IMAGE_NAME = "yarden-movies-api"
+}
     stages{
         stage('clone movies repo'){
             steps{
@@ -9,8 +12,26 @@ pipeline{
         }
         stage('build'){
             steps{
-                sh "docker build -f movies/Dockerfile -t movies-api ."
+                echo "******building the app******"
+                sh "docker build -f movies/Dockerfile -t ${env.IMAGE_NAME}:${env.BUILD_NUMBER} ."
                 sh "docker images"
+            }
+        }
+        stage('test'){
+            steps{
+                echo "******testing the app******"
+                sh "docker run -d -p 8080:80 --name test-container ${env.IMAGE_NAME}:${env.BUILD_NUMBER}"
+                sh "python3 -f movies/Test/test.py"
+            }
+        post{
+            always{
+                sh "docker rm -f test-container"
+            }
+        }
+        }
+        stage('deploy'){
+            steps{
+                echo "******deploying a new version******"
             }
         }
     }
