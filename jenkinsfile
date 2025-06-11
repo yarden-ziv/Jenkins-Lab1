@@ -2,7 +2,7 @@ pipeline{
     agent any
     environment {
         IMAGE_NAME = "yarden-movies-api"
-}
+    }
     stages{
         stage('clone movies repo'){
             steps{
@@ -30,6 +30,7 @@ pipeline{
             }
         }
         }
+    }
         stage('deploy'){
             steps{
                 echo "******deploying a new version******"
