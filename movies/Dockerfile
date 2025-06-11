@@ -9,3 +9,5 @@ RUN pip install -r requirments.txt
 COPY movies-api/movies.py .
 
 EXPOSE 80
+
+CMD ["pyton3", "movies.py"]
