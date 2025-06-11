@@ -1,6 +1,6 @@
 import requests
 
-url = "http://localhost:8080/movie"
+url = "http://localhost:8085/movie"
 data = {"id": 3, "name": 'Alien', 'length': 120, 'genre': 'Horror'}
 
 #get current movies list
