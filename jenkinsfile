@@ -21,11 +21,11 @@ pipeline{
             steps{
                 echo "******testing the app******"
                 sh "docker run -d -p 8085:80 --name test-container ${env.IMAGE_NAME}:${env.BUILD_NUMBER}"
-                sh 'docker logs test-container'
+                sh 'docker logs test-container --since 5s'
                 sh '''
 echo "Waiting for API to be ready..."
 for i in {1..10}; do
-  if curl -s http://localhost:8085/movie > /dev/null; then
+  if curl -s -o /dev/null -w "%{http_code}\\n" http://localhost:8085/movie > /dev/null; then
     echo "API is up!"
     break
   else
