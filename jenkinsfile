@@ -23,11 +23,11 @@ pipeline{
                 sh "docker run -d -p 8085:80 --name test-container ${env.IMAGE_NAME}:${env.BUILD_NUMBER}"
                 sh "python3 movies/Test/test.py"
             }
-        // post{
-        //     always{
-        //         sh "docker rm -f test-container"
-        //     }
-        // }
+        post{
+            always{
+                sh "docker rm -f test-container"
+            }
+        }
         }
         stage('deploy'){
             steps{
