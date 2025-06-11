@@ -21,7 +21,7 @@ pipeline{
             steps{
                 echo "******testing the app******"
                 sh "docker run -d -p 8085:80 --name test-container ${env.IMAGE_NAME}:${env.BUILD_NUMBER}"
-                sh "python3 -f movies/Test/test.py"
+                sh "python3 movies/Test/test.py"
             }
         post{
             always{
