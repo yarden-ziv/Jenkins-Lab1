@@ -1,4 +1,5 @@
 import requests
+import sys
 
 url = "http://localhost:8085/movie"
 data = {"id": 3, "name": 'Alien', 'length': 120, 'genre': 'Horror'}
@@ -17,9 +18,11 @@ print(response.json())
 output = response.json()
 
 for movie in output:
-    if movie["name"] == data["name"]:
+    if movie["name"] == "dooby":
         print("API Test completed successfully")
         flag = True
+        sys.exit(0)
 
 if flag == False:
     print("API test failed")
+    sys.exit(1)
