@@ -18,7 +18,7 @@ print(response.json())
 output = response.json()
 
 for movie in output:
-    if movie["name"] == "dooby":
+    if movie["name"] == data["name"]:
         print("API Test completed successfully")
         flag = True
         sys.exit(0)
